@@ -1,0 +1,13 @@
+You'd need a road module to store the raw road array. roads and roadGraph would be in this module.
+
+Then I'd have a graph module that builds the map so only needs buildGraph. This module would require the road module
+
+Then there needs to be a module that holds all the parcel locations so requires VillageState. This module would require and graph module
+
+Then there needs to be a routing module that contains all the possible types the robot can route, so goalOrientedRobot, findRoute, routeRobot, mailRoute,
+randomRobot, randomPick and runRobot. 
+
+
+You could use NPM to improve and reduce the code used. Could use djikstrajs which is a routing algorithm instead of whats in the findRoute, this could also
+be put in its own module. This would shrink the code size and make sure that we havent made any errors as this package is used by many other people already
+

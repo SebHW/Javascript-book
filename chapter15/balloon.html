@@ -1,0 +1,44 @@
+<p>🎈</p>
+
+<script>
+  // Your code here
+  const maximumPossibleSize = 50;
+  
+  let balloon = document.querySelector("p");
+  let originalFontSize = 15;
+  // Generates the starting size for the balloon
+  balloon.style.fontSize = originalFontSize + "px";
+  
+  // Grow balloon function used when the arrow event is clicked and 
+  // it is found to be the up arrow
+  function growBalloon() {    
+    originalFontSize += originalFontSize * 0.1;
+    // Pops if the balloon is above the max size wanted
+    if (originalFontSize > maximumPossibleSize) {
+      balloon.textContent = "💥";
+      // Removes the event listener for change balloon when it is popped
+      window.removeEventListener("keydown", changeBalloon);
+    }
+    else {
+      balloon.style.fontSize = originalFontSize + "px";
+    }
+  }
+  // Shrinks the balloon appropriately
+  function shrinkBalloon() {
+    originalFontSize -= originalFontSize * 0.1;
+    balloon.style.fontSize = originalFontSize + "px";
+  }
+  // change balloon event function that reacts for up and down arrow
+  function changeBalloon(event) {
+    if (event.key === "ArrowUp") {
+      growBalloon();
+      event.preventDefault();  // To prevent scrolling of browser window
+    }
+    else if (event.key === "ArrowDown") {
+      shrinkBalloon();
+      event.preventDefault();  // To prevent scrolling of browser window
+    }
+  }
+  // Event listener for all key presses that activates change baloon function
+  window.addEventListener("keydown", changeBalloon);
+</script>

@@ -1,0 +1,65 @@
+<link rel="stylesheet" href="css/game.css">
+<style>.monster { background: purple }</style>
+
+<body>
+  <script>
+    // Complete the constructor, update, and collide methods
+    monsterSpeed = 2;
+    class Monster {
+      // add a bouncing actor element into the constructor
+      constructor(pos) {
+        this.pos = pos;
+      }
+
+      get type() { return "monster"; }
+
+      static create(pos) {
+        return new Monster(pos.plus(new Vec(0, -1)));
+      }
+
+      update(time, state) {
+        let player = state.player;
+        // picks the direction based on where the player is
+        let speed = (player.pos.x < this.pos.x ? -1 : 1) * time * monsterSpeed;
+        // adds the speed in the x plane to move towards the player
+        let newPos = new Vec(this.pos.x + speed, this.pos.y);
+        
+        if (state.level.touches(newPos, this.size, "wall")) 
+            return this;
+        else 
+            return new Monster(newPos);
+      }
+
+      collide(state) {
+        let player = state.player;
+        if (player.pos.y + player.size.y < this.pos.y + 0.5) {
+          let deleted = state.actors.filter(a => a != this);
+          //deleted the monsters who's head have been squished
+          return new State(state.level, deleted, state.status);
+        } else {
+          // changes the state to lost as the monster caught the player
+          return new State(state.level, state.actors, "lost");
+        }
+      }
+    }
+
+    Monster.prototype.size = new Vec(1.2, 2);
+
+    levelChars["M"] = Monster;
+
+    runLevel(new Level(`
+..................................
+.################################.
+.#..............................#.
+.#..............................#.
+.#..............................#.
+.#...........................o..#.
+.#..@...........................#.
+.##########..............########.
+..........#..o..o..o..o..#........
+..........#...........M..#........
+..........################........
+..................................
+`), DOMDisplay);
+  </script>
+</body>

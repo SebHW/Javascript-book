@@ -1,0 +1,78 @@
+<link rel="stylesheet" href="css/game.css">
+
+<body>
+<script>
+  function runLevel(level, Display) {
+    let display = new Display(document.body, level);
+    let state = State.start(level);
+    let ending = 1;
+    // New state variable used to track if the animation is running.
+    let running = "yes";
+    /* OLD PROMISE TO RETURN
+    return new Promise(resolve => {
+      runAnimation(time => {
+        state = state.update(time, arrowKeys);
+        display.syncState(state);
+        if (state.status == "playing") {
+          return true;
+        } else if (ending > 0) {
+          ending -= time;
+          return true;
+        } else {
+          display.clear();
+          resolve(state.status);
+          return false;
+        }
+      });
+    });
+    */
+    return new Promise(resolve => {
+      // Now the promise is beind resolved based around the escape handler
+      function escHandler(event) {
+        // If it aint esc then return out this promise with nothing
+        if (event.key != "Escape") return;
+        // So since it is esc then cancels the event and removin the default
+        // functionality of event.
+        event.preventDefault();
+        // Toggles the running state between yes and no
+        if (running == "no") {
+          running = "yes";
+          runAnimation(frame);
+        } else if (running == "yes") {
+          running = "pausing";
+        } else {
+          running = "yes";
+        }
+      }
+      
+      window.addEventListener("keydown", escHandler);
+	  // Local helper function like seen earlier which when returns false
+      // the animation is not running. This replaces the previous promise
+      function frame(time) {
+        if (running == "pausing") {
+          running = "no";
+          return false;
+        }
+		// updates the state
+        state = state.update(time, arrowKeys);
+        // displays the updated state
+        display.syncState(state);
+        
+        if (state.status == "playing") {
+          return true;
+        } else if (ending > 0) {
+          ending -= time;
+          return true;
+        } else {
+          display.clear();
+          //window.removeEventListener("keydown", escHandler);
+          resolve(state.status);
+          return false;
+        }
+      }
+      runAnimation(frame);
+    });
+  }
+  runGame(GAME_LEVELS, DOMDisplay);
+</script>
+</body>

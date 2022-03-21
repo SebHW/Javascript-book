@@ -1,0 +1,37 @@
+<canvas width="400" height="400"></canvas>
+<script>
+  let cx = document.querySelector("canvas").getContext("2d");
+
+  let lastTime = null;
+  function frame(time) {
+    if (lastTime != null) {
+      updateAnimation(Math.min(100, time - lastTime) / 1000);
+    }
+    lastTime = time;
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+  let x = 100, xVelocity = 20;
+  let y = 200, yVelocity = 10;
+  let radius = 25;
+  function updateAnimation(step) {
+    // Your code here.
+    cx.clearRect(0, 0, 400, 400);
+    cx.strokeStyle = "black";
+    cx.lineWidth = 4;
+    // radius of the ball is 25
+    cx.strokeRect(25, 25, 350, 350);
+    x += step * xVelocity;
+    y += step * yVelocity;
+    // If the edge of the ball hits either side of the box
+    // then reverse the direction.
+    if (x < 2*radius || x > 400 - 2*radius)
+      xVelocity = -xVelocity;
+    if (y < 2*radius || y > 400 - 2*radius)
+      yVelocity = -yVelocity;
+    cx.fillStyle = "red";
+    cx.beginPath();
+    cx.arc(x, y, radius, 0, 7);
+    cx.fill();
+  }
+</script>

@@ -1,0 +1,35 @@
+<style>
+    .trail { /* className for the trail elements */
+      position: absolute;
+      height: 6px; width: 6px;
+      border-radius: 3px;
+      background: teal;
+    }
+    body {
+      height: 300px;
+    }
+  </style>
+  
+  <script>
+    // Your code here.
+    let dots = [];
+    // Creates the chain of dots using DOM elements
+    for (let i = 0; i < 12; i++) {
+      let node = document.createElement("div");
+      // Gives each node the trail class so they look similar
+      node.className = "trail";
+      document.body.appendChild(node);
+      dots.push(node);
+    }
+    //console.log(dots);
+    let currentDot = 0;
+    
+    window.addEventListener("mousemove", event => {
+      // Starts with the first dot and draws it behind the cursor
+      let dot = dots[currentDot];
+      dot.style.left = (event.pageX - 3) + "px";
+      dot.style.top = (event.pageY - 3) + "px";
+      // Reverts back to 0 when the last dot has been reached
+      currentDot = (currentDot + 1) % dots.length;
+    });
+  </script>

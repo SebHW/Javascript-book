@@ -1,0 +1,5 @@
+Require adds the module to the cache so if ever require is called to the same module it can check the cache if its there, this saves it reloading the
+whole module again. If a require call is made during the running of the program the current interface will be returned. 
+
+If the module replace its default exports object during a cycle then any module receiving an interface from that module will get the default rather than
+the overwritten value.

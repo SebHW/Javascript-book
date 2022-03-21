@@ -1,0 +1,5 @@
+Use a canvas element as a source image. Create an extra <canvas> element, without adding it to the document
+, and draw inverted images to it, once. When drawing an actual frame, just copy the already inverted sprites to the main canvas.
+
+As images do not load instantly a load handler is needed. Once loaded the images are drawn once and can be pulled
+from immediately.

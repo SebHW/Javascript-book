@@ -1,0 +1,59 @@
+<tab-panel>
+    <div data-tabname="one">Tab one</div>
+    <div data-tabname="two">Tab two</div>
+    <div data-tabname="three">Tab three</div>
+  </tab-panel>
+  <script>
+    // Keeps track of the currently selected tab.
+    let activeTab;
+    // Keeps track of the current body of tab to be displayed.
+    let currentBody;
+    function switchTab(event) {
+      // Switches the `activeTab` binding to the newly selected tab, and
+      // removes the `selected` class from the previously selected tab while
+      // adding it to the newly switched `activeTab`.
+      activeTab.classList.remove("selected");
+      activeTab = event.target;
+      activeTab.classList.add("selected");
+      let tabContent = document.querySelectorAll("div");
+      console.log(tabContent);
+      // Hides the content of the previously selected tab.
+      currentBody.classList.toggle("hidden");
+  
+      // Manages display of the contents of the multiple tabbed sections.
+      switch(activeTab.textContent) {      
+        case "one":
+          currentBody = tabContent[0];
+          break;
+        case "two":
+          currentBody = tabContent[1];
+          break;
+        case "three":
+          currentBody = tabContent[2];
+          break;
+      }
+  
+      // Displays the content of the currently selected tab.
+      currentBody.classList.toggle("hidden");
+    }
+    function asTabs(node) {
+      // Your code here.
+      let tabLength = node.children.length;
+          
+      for (let i = 0; i < tabLength; i++) {
+        let tabButton = document.createElement("button");
+            
+        tabButton.textContent = document.querySelectorAll("div")[i].getAttribute("data-tabname");
+        // By default, hide the body of the tabs.
+        node.querySelectorAll("div")[i].classList.add("hidden");
+        tabButton.addEventListener("click", switchTab);
+        node.insertBefore(tabButton, document.querySelector("div"));
+      }
+      // Sets the initially selected tab & display its associated content.
+      activeTab = document.querySelector("button");
+      activeTab.classList.add("selected");
+      currentBody = document.querySelector("div");
+      currentBody.classList.toggle("hidden");
+    }
+    asTabs(document.querySelector("tab-panel"));
+  </script>

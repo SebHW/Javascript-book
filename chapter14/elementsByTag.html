@@ -1,0 +1,35 @@
+<h1>Heading with a <span>span</span> element.</h1>
+<p>A paragraph with <span>one</span>, <span>two</span>
+  spans.</p>
+
+<script>
+  function byTagName(node, tagName) {
+    // Your code here.
+    let found = [];
+    tagName = tagName.toUpperCase();
+
+    function recursive(node) {
+      // Loops over all the child nodes.
+      for (let i = 0; i < node.childNodes.length; i++) {
+        // Checks the node type with Node.ELEMENT_NODE
+        if (node.childNodes[i].nodeType == Node.ELEMENT_NODE) {
+          // Recurses over the children and pushes the child if they 
+          // have the same tag name
+          if (node.childNodes[i].nodeName == tagName) found.push(node.childNodes[i]);
+          recursive(node.childNodes[i]);
+        }
+      }
+    }
+
+      recursive(node);
+      return found;
+  }
+
+  console.log(byTagName(document.body, "h1").length);
+  // → 1
+  console.log(byTagName(document.body, "span").length);
+  // → 3
+  let para = document.querySelector("p");
+  console.log(byTagName(para, "span").length);
+  // → 2
+</script>

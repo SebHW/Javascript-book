@@ -1,0 +1,38 @@
+<canvas width="600" height="300"></canvas>
+<script>
+  let cx = document.querySelector("canvas").getContext("2d");
+  let total = results
+    .reduce((sum, {count}) => sum + count, 0);
+  let currentAngle = -0.5 * Math.PI;
+  let centerX = 300, centerY = 150;
+
+  // Add code to draw the slice labels in this loop.
+  for (let result of results) {
+    // Drawing of pie chart
+    let sliceAngle = (result.count / total) * 2 * Math.PI;
+    cx.beginPath();
+    cx.arc(centerX, centerY, 100,
+           currentAngle, currentAngle + sliceAngle);
+    // Generation of text variables
+    // Text goes in the middle of each wedge
+    let textAngle = currentAngle + 0.5 * sliceAngle;
+    let textPositionX = Math.cos(textAngle) * 120 + centerX, 
+        textPositionY = Math.sin(textAngle) * 120 + centerY;
+    cx.fillStyle = "black";
+    //cx.fillText(result.name, textPositionX, textPositionY);
+    
+    currentAngle += sliceAngle;
+    cx.lineTo(centerX, centerY);
+    cx.fillStyle = result.color;
+    cx.fill();
+    // Whichever side the wedge is on the text is aligned that
+    // way as to not impose on the chart.
+    if (Math.cos(textAngle) > 0) {
+      cx.textAlign = "left";
+    } else {
+      cx.textAlign = "right";
+    }
+    cx.fillStyle = "black";
+    cx.fillText(result.name, textPositionX, textPositionY);
+  }
+</script>
