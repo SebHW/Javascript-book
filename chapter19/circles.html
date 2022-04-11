@@ -3,25 +3,31 @@
 
 <div></div>
 <script>
-  function circle(pos, state, dispatch) {
-    // Your code here
-    function drawCircle(to) {
-      let radius = Math.sqrt(Math.pow(to.x - pos.x, 2) + Math.pow(to.y - pos.y, 2));
-      let centreRadius = Math.ceil(radius);
+  function circle(start, state, dispatch) {
+    function drawCircle(pos) {
+      // Radius is the line from the start to the position where the
+      // curser ends up.
+      let radius = Math.sqrt(Math.pow(pos.x - start.x, 2) + Math.pow(pos.y - start.y, 2));
+      let integerRadius = Math.ceil(radius);
       let drawn = [];
-      for (let y = -centreRadius; y <= centreRadius; y++) {
-        for (let x = -centreRadius; x <= centreRadius; x++) {
-          let dist = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+      // loop over a square double the radius of the circle, as if its
+      // a square that containts the circle.
+      for (let dy = -integerRadius; dy <= integerRadius; dy++) {
+        for (let dx = -integerRadius; dx <= integerRadius; dx++) {
+          // distance between the pointer and the start.
+          let dist = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
           if (dist > radius) continue;
-          let newY = pos.y + y, newX = pos.x + x;
-          if (newY < 0 || newY >= state.picture.height ||
-              newX < 0 || newX >= state.picture.width) continue;
-          drawn.push({newX, newY, color: state.color});
+          let y = start.y + dy, x = start.x + dx;
+          // If those the new positions are outside the picture then
+          // skip and dont draw
+          if (y < 0 || y >= state.picture.height ||
+              x < 0 || x >= state.picture.width) continue;
+          drawn.push({x, y, color: state.color});
         }
       }
       dispatch({picture: state.picture.draw(drawn)});
     }
-    drawCircle(pos);
+    drawCircle(start);
     return drawCircle;
   }
 

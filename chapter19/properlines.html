@@ -1,0 +1,69 @@
+<div></div>
+<script>
+  // The old draw tool. Rewrite this.
+  function draw(pos, state, dispatch) {
+    function drawPixel(newPos, state) {
+      //let drawn = {x, y, color: state.color};
+      pixels = []
+      // Set the colour here as it doesn't like pushing
+      // state.color in the object into the pixels array
+      //let color = state.color
+      // Figure out what angle the line is at
+      xDiff = Math.abs(pos.x - newPos.x)
+      yDiff = Math.abs(pos.y - newPos.y)
+      if (xDiff > yDiff){
+        // Check whether starting point has a higher
+        // coordinate along that axis than the endpoint
+        if (pos.x > newPos.x) {
+          [pos, newPos] = [newPos, pos];
+        }
+        // Since the change in X is greater than Y the
+        // slope will be increasing in the y direction
+        // so need m = dy/dx
+        let slope = (newPos.y - pos.y)/(newPos.x - pos.x);
+        // Count through all the x coordinates adding the
+        // pixels and the slope onto y, used x and y's unit
+        // vectors cos I already used x and y
+        for (let {i, j} = pos; i <= newPos.x; i++) {
+          //round the non-main axis coordinates since they are 
+          // likely to be fractional and the draw method doesn’t
+          // respond well to fractional coordinates.
+          pixels.push({i, j: Math.round(j), color: state.color})
+          j += slope;
+        }
+      } else {
+        // Check whether starting point has a higher
+        // coordinate along that axis than the endpoint
+        if (pos.y > newPos.y) {
+          [pos, newPos] = [newPos, pos];
+        }
+        // Since the change in Y is greater than X the
+        // slope will be decreasing in the y direction
+        // so need m^-1 = (dy/dx)^-1 = dx/dy
+        let slope = (newPos.x - pos.x)/(newPos.y - pos.y);
+        // Count through all the y coordinates adding the
+        // pixels and the slope onto x, used x and y's unit
+        // vectors cos I already used x and y
+        for (let {i, j} = pos; j <= newPos.y; j++) {
+          pixels.push({i: Math.round(i), j, color: state.color})
+          i += slope;
+        }
+      }
+      pos = newPos
+      dispatch({picture: state.picture.draw([pixels])});
+    }
+    drawPixel(pos, state);
+    return drawPixel;
+  }
+  
+  
+
+  function line(pos, state, dispatch) {
+    // Your code here
+  }
+
+  let dom = startPixelEditor({
+    tools: {draw, line, fill, rectangle, pick}
+  });
+  document.querySelector("div").appendChild(dom);
+</script>

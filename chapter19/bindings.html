@@ -28,9 +28,14 @@
                 ...this.controls.reduce(
                     (a, c) => a.concat(" ", c.dom), []));
         }
-        keyDown(event, config) {
+        syncState(state) {
+            this.state = state;
+            this.canvas.syncState(state.picture);
+            for (let ctrl of this.controls) ctrl.syncState(state);
+        }
+      keyDown(event, config) {
             // IF ctrl and z is pressed then the dispatch (update the state)
-            // by activating the undo history button by changing its state to true.
+            // by update the undo history button by changing its state to true.
             if (event.key == "z" && event.ctrlKey) {
                 config.dispatch({ undo: true });
             }
@@ -45,11 +50,6 @@
                     }
                 }
             }
-        }
-        syncState(state) {
-            this.state = state;
-            this.canvas.syncState(state.picture);
-            for (let ctrl of this.controls) ctrl.syncState(state);
         }
     }
 
